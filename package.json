@@ -1,0 +1,11 @@
+{
+  "name": "devnullbrand",
+  "private": true,
+  "scripts": {
+	"build:css": "tailwindcss -c tailwind.config.js -i ./input.css -o ./public/styles.css --minify"
+  },
+  "devDependencies": {
+	"tailwindcss": "^3.4.0",
+	"serverless-lift": "^1.32.0"
+  }
+}

@@ -1,0 +1,19 @@
+service: devnullbrand
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  profile: DevNullBrandProd
+  region: eu-central-1
+  runtime: nodejs18.x
+
+plugins:
+  - serverless-lift
+
+constructs:
+  site:
+    type: static-website
+    path: public
+    domain: devnullbrand.com
+    certificate: arn:aws:acm:us-east-1:041327038343:certificate/90f84949-dea2-404d-a9c6-54fa2352ac1b

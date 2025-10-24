@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-neutral-900 text-neutral-100">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>DevNullBrand</title>
+
+	<!-- Prebuilt Tailwind output -->
+	<link rel="stylesheet" href="./styles.css" />
+
+	<meta property="og:title" content="DevNullBrand" />
+	<meta property="og:description" content="Brand name generator that filters garbage instead of generating it." />
+	<meta property="og:type" content="website" />
+	<link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+	<script src="https://cdn.usefathom.com/script.js" data-site="OXABNBLT" defer></script>
+</head>
+<body class="h-full flex items-center justify-center p-6 font-sans">
+<main class="w-full max-w-md text-center space-y-8">
+
+	<header class="space-y-2">
+		<h1 class="text-3xl font-semibold tracking-tight">
+			DevNullBrand
+		</h1>
+		<p class="text-sm text-neutral-400 leading-relaxed">
+			Yet another name generator, now without AI.
+		</p>
+	</header>
+
+	<div id="nameBox"
+		 class="rounded-xl border border-neutral-700 bg-neutral-800/50 p-8 text-2xl font-medium tracking-wide min-h-[4rem] flex items-center justify-center select-all">
+		<span id="brandName" class="text-neutral-100">…</span>
+	</div>
+
+	<div class="flex flex-col sm:flex-row gap-3 justify-center">
+		<button id="newNameBtn"
+				class="flex-1 rounded-lg bg-neutral-100 text-neutral-900 text-base font-semibold py-3 px-4 hover:bg-white active:scale-[0.99] transition">
+			Generate name
+		</button>
+
+		<button id="copyBtn"
+				class="flex-1 rounded-lg border border-neutral-600 text-neutral-200 text-base font-medium py-3 px-4 hover:bg-neutral-800 active:scale-[0.99] transition">
+			Copy
+		</button>
+	</div>
+
+	<footer class="pt-6 text-[0.7rem] text-neutral-500 leading-relaxed">
+		<p class="text-[0.6rem] text-neutral-600 leading-relaxed pt-8">
+			Names are machine-filtered from large public text corpora.
+			Some junk will still slip through. Don’t ship anything dumb.
+		</p>
+		<p class="pt-3 text-neutral-600">
+			devnullbrand.com
+		</p>
+	</footer>
+
+</main>
+
+<!-- preload name list -->
+<script src="./brand_names.js"></script>
+
+<script>
+	;(() => {
+		let NAMES = window.BRAND_NAMES || [];
+		let lastIndex = -1;
+
+		function pickRandom() {
+			if (NAMES.length === 0) return null;
+			if (NAMES.length === 1) return 0;
+			let i;
+			do {
+				i = Math.floor(Math.random() * NAMES.length);
+			} while (i === lastIndex);
+			lastIndex = i;
+			return i;
+		}
+
+		function showRandomName() {
+			const idx = pickRandom();
+			const el = document.getElementById('brandName');
+			if (idx === null) {
+				el.textContent = 'no data';
+				return;
+			}
+			el.textContent = NAMES[idx];
+		}
+
+		function copyCurrent() {
+			const text = document.getElementById('brandName').textContent.trim();
+			if (!text || text === '…' || text === 'no data') return;
+			navigator.clipboard.writeText(text).then(() => {
+				const copyBtn = document.getElementById('copyBtn');
+				const old = copyBtn.textContent;
+				copyBtn.textContent = 'Copied ✓';
+				setTimeout(() => { copyBtn.textContent = old; }, 1000);
+			}).catch(() => {
+				// clipboard may fail on some browsers w/ file://, whatever
+			});
+		}
+
+		window.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('newNameBtn').addEventListener('click', showRandomName);
+			document.getElementById('copyBtn').addEventListener('click', copyCurrent);
+			showRandomName();
+		});
+	})();
+</script>
+</body>
+</html>
